@@ -10,31 +10,40 @@
         "lat": 38.727881642324164,
         "lng": -9.140900099907554
       },
-      "id": 73930385
+      "id": "73930385"
     },
     {
-      "cityName": "Madrid",
-      "country": "Spain",
-      "emoji": "🇪🇸",
-      "date": "2027-07-15T08:22:53.976Z",
+      "id": "8adf",
+      "cityName": "Sanilhac",
+      "country": "France",
+      "date": "2024-08-27T12:00:22.378Z",
       "notes": "",
       "position": {
-        "lat": 40.46635901755316,
-        "lng": -3.7133789062500004
-      },
-      "id": 17806751
+        "lat": "45.120052841530544",
+        "lng": "0.7250976562500001"
+      }
     },
     {
-      "cityName": "Berlin",
-      "country": "Germany",
-      "emoji": "🇩🇪",
-      "date": "2027-02-12T09:24:11.863Z",
-      "notes": "Amazing 😃",
+      "id": "3c8c",
+      "cityName": "Alcantud",
+      "country": "Spain",
+      "date": "2024-08-27T13:12:22.680Z",
+      "notes": "",
       "position": {
-        "lat": 52.53586782505711,
-        "lng": 13.376933665713324
-      },
-      "id": 98443197
+        "lat": "40.5194161520624",
+        "lng": "-2.2755432128906254"
+      }
+    },
+    {
+      "id": "e6b5",
+      "cityName": "La Iglesuela del Cid",
+      "country": "Spain",
+      "date": "2024-08-27T14:25:34.896Z",
+      "notes": "",
+      "position": {
+        "lat": "40.475158405878716",
+        "lng": "-0.28564453125000006"
+      }
     }
   ]
 }

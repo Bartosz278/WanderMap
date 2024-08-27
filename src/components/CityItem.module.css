@@ -31,11 +31,19 @@
   margin-right: auto;
 }
 
+.country {
+  margin-left: 5px;
+  font-size: 0.99rem;
+}
+
 .date {
   font-size: 1.5rem;
 }
 
 .deleteBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   height: 2rem;
   aspect-ratio: 1;
   border-radius: 50%;

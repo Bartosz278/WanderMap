@@ -1,8 +1,16 @@
 // "https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=0&longitude=0"
 
-import { useState } from "react";
-
+import { useEffect, useState } from "react";
 import styles from "./Form.module.css";
+import mobileStyles from "./FormMobile.module.css";
+import Button from "./Button";
+import { useNavigate } from "react-router-dom";
+import { useUrlPosition } from "../hooks/useUrlPosition";
+import Spinner from "./Spinner";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import useCities from "../context/useCities";
+import useMobile from "../context/useMobile";
 
 export function convertToEmoji(countryCode) {
   const codePoints = countryCode
@@ -13,15 +21,75 @@ export function convertToEmoji(countryCode) {
 }
 
 function Form() {
+  const navigate = useNavigate();
+
   const [cityName, setCityName] = useState("");
   const [country, setCountry] = useState("");
   const [date, setDate] = useState(new Date());
   const [notes, setNotes] = useState("");
+  const [lat, lng] = useUrlPosition();
+  const [isLoadingGeo, setIsLoadingGeo] = useState(false);
+  const [error, setError] = useState("");
+  const { createCity, isLoading } = useCities();
+  const isMobile = useMobile();
+
+  const BASE_URL = "https://api.bigdatacloud.net/data/reverse-geocode-client";
+
+  useEffect(
+    function () {
+      async function fetchCityData() {
+        try {
+          setError("");
+          setIsLoadingGeo(true);
+          const res = await fetch(
+            `${BASE_URL}?latitude=${lat}&longitude=${lng}`
+          );
+          const data = await res.json();
+          if (!data.countryCode) throw new Error("Country not found");
+          setCityName(data.city || data.locality || "");
+          setCountry(data.countryName || "");
+        } catch (err) {
+          setError(err.message);
+          throw new Error("fetching failed");
+        } finally {
+          setIsLoadingGeo(false);
+        }
+      }
+      fetchCityData();
+    },
+    [lat, lng]
+  );
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    if (!cityName || !date) return;
+    const newCity = {
+      cityName,
+      country,
+      date,
+      notes,
+      position: { lat, lng },
+    };
+    await createCity(newCity);
+    navigate("/app/cities");
+  }
+
+  const appliedStyles = isMobile ? mobileStyles : styles;
+
+  if (isLoadingGeo) return <Spinner />;
+  if (!lat && !lng) return <h2>Start by clicick somewhere on the map</h2>;
+  if (error) return <h2>{error}</h2>;
 
   return (
-    <form className={styles.form}>
+    <form
+      className={`${appliedStyles.form} ${isLoading ? styles.loading : ""}`}
+      onSubmit={handleSubmit}
+    >
       <div className={styles.row}>
-        <label htmlFor="cityName">City name</label>
+        <label htmlFor="cityName" className={styles.country}>
+          {country}{" "}
+        </label>
+
         <input
           id="cityName"
           onChange={(e) => setCityName(e.target.value)}
@@ -32,10 +100,12 @@ function Form() {
 
       <div className={styles.row}>
         <label htmlFor="date">When did you go to {cityName}?</label>
-        <input
+
+        <DatePicker
+          onChange={(date) => setDate(date)}
+          selected={date}
+          dateFormat="dd/MM/yyyy"
           id="date"
-          onChange={(e) => setDate(e.target.value)}
-          value={date}
         />
       </div>
 
@@ -49,8 +119,16 @@ function Form() {
       </div>
 
       <div className={styles.buttons}>
-        <button>Add</button>
-        <button>&larr; Back</button>
+        <Button type="primary">Add</Button>
+        <Button
+          type="back"
+          onClick={(e) => {
+            e.preventDefault();
+            navigate(-1);
+          }}
+        >
+          &larr;
+        </Button>
       </div>
     </form>
   );
