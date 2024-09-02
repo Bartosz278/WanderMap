@@ -8,7 +8,9 @@ function PageNav() {
       <Logo />
       <ul>
         <li>
-          <NavLink className={styles.ctaLink}>Login</NavLink>
+          <NavLink to="/login" className={styles.ctaLink}>
+            Login
+          </NavLink>
         </li>
       </ul>
     </nav>

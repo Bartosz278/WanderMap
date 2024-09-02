@@ -3,6 +3,7 @@ import Sidebar from "../components/Sidebar";
 import styles from "./AppLayout.module.css";
 import mobileStyles from "./AppLayoutMobile.module.css";
 import useMobile from "../context/useMobile";
+import User from "../components/User";
 
 function AppLayout() {
   const isMobile = useMobile();
@@ -12,6 +13,7 @@ function AppLayout() {
     <div className={appliedStyles.app}>
       <Sidebar />
       <Map />
+      <User />
     </div>
   );
 }
